@@ -16,7 +16,7 @@ from sklearn.model_selection import train_test_split
 TARGET, RANDOM_STATE = "price_usd", 42
 st.set_page_config(page_title="Used Car Price Demo", page_icon="🚗", layout="wide")
 st.title("🚗 Used Car Price Prediction")
-st.write("Upload a CSV with a numeric price_usd target. This is an educational local demo, not a professional valuation.")
+st.write("Upload a CSV with a numeric `price_usd` column to compare models and try a price estimate.")
 uploaded = st.file_uploader("Upload used-car dataset (CSV)", type=["csv"])
 if uploaded is None:
     st.info("Upload your CSV to train and compare models.")
@@ -69,7 +69,7 @@ comparison = pd.DataFrame(rows).sort_values("RMSE").reset_index(drop=True)
 st.subheader("Held-out test-set comparison")
 st.dataframe(comparison.round(3), use_container_width=True)
 best_name = comparison.iloc[0]["Model"]
-st.caption(f"Lowest RMSE in this split: {best_name}; this does not guarantee future-market accuracy.")
+st.caption(f"Lowest RMSE on this test split: {best_name}.")
 st.subheader("Estimate a vehicle price")
 st.write("Enter feature values compatible with the uploaded dataset.")
 with st.form("prediction_form"):
@@ -89,7 +89,7 @@ if submitted:
     try:
         estimate = float(pipelines[best_name].predict(sample)[0])
         st.success(f"Estimated price: {estimate:,.2f} (dataset target units)")
-        st.caption("Treat this as a model estimate only, especially for unusual vehicles or changing markets.")
+        st.caption("This is an estimate based on the uploaded data.")
     except Exception as exc:
         st.error(f"Prediction failed; check dataset feature values. Details: {exc}")
 with st.expander("Dataset audit"):
